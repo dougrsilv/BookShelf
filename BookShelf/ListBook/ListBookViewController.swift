@@ -46,8 +46,15 @@ class ListBookViewController: UIViewController {
 
 extension ListBookViewController: ListBookViewModelOutput {
     func onListBookLoaded(dic: [String : [Books]]) {
-        listBookView.category = dic
-        listBookView.tableViewBooks.reloadData()
+        listBookView.loadBoolShimmerView = false
+        self.listBookView.category = dic
+        self.listBookView.tableViewBooks.reloadData()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.listBookView.loadBoolShimmerView = true
+            self.listBookView.category = dic
+            self.listBookView.tableViewBooks.reloadData()
+        }
     }
     
     func onFailure(name: BooksServiceError) {

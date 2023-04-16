@@ -15,9 +15,10 @@ class ListBookView: UIView {
    
     // MARK: - Properties
     
-    let cell = "Cell"
+    private let cell = "Cell"
     var category: [String : [Books]] = [:]
     weak var delegate: ListBookViewDelegate?
+    var loadBoolShimmerView = false
     
     lazy var tableViewBooks: UITableView = {
         let table = UITableView()
@@ -66,6 +67,7 @@ extension ListBookView: UITableViewDelegate, UITableViewDataSource {
         let key = Array(category.keys)[indexPath.row]
         cell.categoryList = category[key] ?? []
         cell.delegate = self
+        cell.loadedShimmerViewListBook(value: loadBoolShimmerView)
         return cell
     }
 }

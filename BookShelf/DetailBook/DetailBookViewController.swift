@@ -36,7 +36,7 @@ class DetailBookViewController: UIViewController {
         
         detailBookView.selectBooks = viewModel.setupData()
         
-        viewModel.searchService { [weak self] service in
+        viewModel.searchService(bookId: viewModel.captureIdBookAndConverterInt()) { [weak self] service in
             guard let self = self else { return }
             switch service {
             case let .success(sucess):

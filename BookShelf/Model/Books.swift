@@ -8,12 +8,12 @@
 import Foundation
 
 struct Books: Decodable {
-    let author: String
-    let category: String
-    let id: Int
-    let isHighlight: Bool
-    let photo: String
-    let price: Int
-    let stock: Int
     let title: String
+    let author: String
+    let photo: String
+    let isHighlight: Bool
+    let stock: String
+    let price: String
+    let category: String
+    let id: String
 }

@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct CommentsModel: Decodable {
-    let body: String
-    let bookId: Int
-    let createdAt: String
+struct CommentsModel: Decodable {    
     let email: String
-    let id: Int
+    let body: String
     let rate: Int
+    let createdAt: Int
+    let id: String
+    let bookId: String
 }

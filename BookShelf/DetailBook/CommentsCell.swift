@@ -88,6 +88,6 @@ class CommentsCell: UICollectionViewCell {
         userPost.text = type.email
         avaliacaoImageView.image = UIImage(named: String(type.rate))
         commentsPost.text = type.body
-        postTime.text = type.createdAt
+        postTime.text = String(type.createdAt)
     }
 }

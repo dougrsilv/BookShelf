@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DetailBookViewModelProtocol {
-    func searchService(completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ())
+    func searchService(bookId: Int, completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ())
 }
 
 class DetailBookViewModel: DetailBookViewModelProtocol {
@@ -24,29 +24,31 @@ class DetailBookViewModel: DetailBookViewModelProtocol {
                                     id: model.id,
                                     photo: model.photo,
                                     price: formatNumberToDecimal(value: model.price),
-                                    stock: convertValueInttoString(value: model.stock),
+                                    stock: model.stock,
                                     title: model.title)
         
         self.datailBook = model
         self.service = service
     }
     
-    
-    
     func setupData() -> DetailBookModel? {
         return datailBook
     }
     
-    func searchService(completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ()) {
-        service?.searchService(completion: { [weak self] service in
+    func captureIdBookAndConverterInt() -> Int {
+        guard let converver = Int(datailBook?.id ?? "") else { return 0 }
+        return converver
+    }
+    
+    func searchService(bookId: Int, completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ()) {
+        service?.searchService(bookId: bookId, completion: { [weak self] service in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch service {
                 case let .failure(erro):
                     completion(.failure(erro))
                 case let .success(success):
-                    let filterId = success.filter({$0.bookId == self.datailBook?.id})
-                    self.listComments.append(contentsOf: filterId)
+                    self.listComments.append(contentsOf: success)
                     completion(.success(self.listComments))
                 }
             }
@@ -58,8 +60,8 @@ class DetailBookViewModel: DetailBookViewModelProtocol {
         return value
     }
     
-    private func formatNumberToDecimal(value: Int) -> String {
-        let converter = Double(value) / Double(100)
+    private func formatNumberToDecimal(value: String) -> String {
+        let converter = (Double(value) ?? 0) / Double(100)
         let numberFormatter = NumberFormatter()
         numberFormatter.locale = Locale(identifier: "pt_BR")
         numberFormatter.minimumFractionDigits = 2

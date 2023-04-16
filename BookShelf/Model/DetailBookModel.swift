@@ -10,7 +10,7 @@ import Foundation
 struct DetailBookModel {
     let author: String
     let category: String
-    let id: Int
+    let id: String
     let photo: String
     let price: String
     let stock: String

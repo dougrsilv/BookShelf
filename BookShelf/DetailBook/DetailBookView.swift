@@ -64,6 +64,7 @@ extension DetailBookView: UITableViewDelegate, UITableViewDataSource {
             if let selectBooks = selectBooks {
                 cell.setupData(books: selectBooks)
             }
+            cell.minHeight = 220
             
             return cell
         }
@@ -92,7 +93,7 @@ extension DetailBookView: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.item {
         case 0:
-            return CGFloat(220)
+            return UITableView.automaticDimension
         case 1:
             return CGFloat(130)
         case 2:

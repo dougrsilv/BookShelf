@@ -20,7 +20,7 @@ class BooksService: BooksServiceProtocol {
     
     func searchService(completion: @escaping (Result<[Books], BooksServiceError>) -> ()) {
         
-        guard let url = URL(string: "https://mockend.com/policante/rest-api/books") else { return }
+        guard let url = URL(string: "https://64382d9bf3a0c40814acc039.mockapi.io/devpoli/books") else { return }
         
         URLSession.shared.dataTask(with: url) { data, res, err in
             if let err = err {

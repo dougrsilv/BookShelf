@@ -13,14 +13,14 @@ enum CommentsServiceError: Error {
 }
 
 protocol CommentsServiceProtocol {
-    func searchService(completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ())
+    func searchService(bookId: Int, completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ())
 }
 
 class CommentsService: CommentsServiceProtocol {
     
-    func searchService(completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ()) {
+    func searchService(bookId: Int, completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ()) {
         
-        guard let url = URL(string: "https://mockend.com/policante/rest-api/comments") else { return }
+        guard let url = URL(string: "https://64382d9bf3a0c40814acc039.mockapi.io/devpoli/books/\(bookId)/Comments") else { return }
         
         URLSession.shared.dataTask(with: url) { data, res, err in
             if let err = err {

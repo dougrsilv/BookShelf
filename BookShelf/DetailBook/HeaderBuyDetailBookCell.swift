@@ -11,6 +11,8 @@ class HeaderBuyDetailBookCell: UITableViewCell {
     
     // MARK: - Properties
     
+    var minHeight: CGFloat?
+    
     private lazy var imageDetailBook: UIImageView = {
         let image = UIImageView()
         image.backgroundColor = .purple
@@ -25,6 +27,7 @@ class HeaderBuyDetailBookCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 24)
         label.text = "Drama"
+        label.numberOfLines = 5
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -73,6 +76,12 @@ class HeaderBuyDetailBookCell: UITableViewCell {
     
     // MARK: - Lifecycle
     
+    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+           let size = super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+           guard let minHeight = minHeight else { return size }
+           return CGSize(width: size.width, height: max(size.height, minHeight))
+       }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -88,9 +97,11 @@ class HeaderBuyDetailBookCell: UITableViewCell {
             
             titleDetailBook.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             titleDetailBook.leadingAnchor.constraint(equalTo: imageDetailBook.trailingAnchor, constant: 30),
+            titleDetailBook.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
             stackDetailBook.topAnchor.constraint(equalTo: titleDetailBook.bottomAnchor, constant: 20),
-            stackDetailBook.leadingAnchor.constraint(equalTo: imageDetailBook.trailingAnchor, constant: 30)
+            stackDetailBook.leadingAnchor.constraint(equalTo: imageDetailBook.trailingAnchor, constant: 30),
+            stackDetailBook.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }
     

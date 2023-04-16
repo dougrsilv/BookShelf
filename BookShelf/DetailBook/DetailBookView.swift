@@ -21,6 +21,8 @@ class DetailBookView: UIView {
         let table = UITableView()
         table.delegate = self
         table.dataSource = self
+        table.allowsSelection = false
+        table.separatorStyle = .none
         table.register(HeaderBuyDetailBookCell.self, forCellReuseIdentifier: headerCell)
         table.register(DescriptionDetailBookCell.self, forCellReuseIdentifier: describeCell)
         table.register(CommentsDetailBookCell.self, forCellReuseIdentifier: commentsCell)
@@ -33,7 +35,6 @@ class DetailBookView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .darkGray
         addSubview(tableViewDetailBooks)
         
         NSLayoutConstraint.activate([

@@ -11,9 +11,6 @@ import UIKit
  Function programming inheritance.
  */
 
-//protocol SkeletonLoadable {}
-
-//extension SkeletonLoadable {
 class SkeletonLoadable {
     
     static let shared = SkeletonLoadable()

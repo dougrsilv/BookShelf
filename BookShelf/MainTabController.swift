@@ -19,7 +19,8 @@ class MainTabController: UITabBarController {
                                           title: "Livros",
                                           image: "icone-hoje")
         
-        let searchBook = self.createTabItem(viewController: SearchBookViewController(),
+        let searchViewModel = SearchBookViewModel(service: booksService)
+        let searchBook = self.createTabItem(viewController: SearchBookViewController(viewModel: searchViewModel),
                                             title: "Pesquisar",
                                             image: "icone-busca")
         

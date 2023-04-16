@@ -55,8 +55,6 @@ class CommentsCell: UICollectionViewCell {
         layer.masksToBounds = true
         clipsToBounds = true
         
-        commentsPost.text = "Ea voluptatibus, praesentium tempore, voluptatibus distinctio, reprehenderit unde nam earum. Consequuntur ea voluptate, explicabo a a perspiciatis blanditiis a nulla, placeat deleniti nemo et amet, adipisci dicta eos, ad ea consectetur a."
-        
         addSubview(avaliacaoImageView)
         addSubview(postTime)
         addSubview(userPost)

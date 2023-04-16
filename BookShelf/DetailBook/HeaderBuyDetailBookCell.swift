@@ -109,6 +109,8 @@ class HeaderBuyDetailBookCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Fuctions
+    
     func setupData(books: DetailBookModel) {
         
         let urlRequest = URLRequest(url: URL(string: books.photo)!)

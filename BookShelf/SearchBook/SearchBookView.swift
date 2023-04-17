@@ -17,7 +17,17 @@ class SearchBookView: UIView {
     
     private let cell = "cell"
     var listFilter = [Books]()
+    var listBooks = [Books]()
+    var decideToListBooks: Bool = false
     weak var delegate: SearchBookViewDelegate?
+    
+    private lazy var titleError: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 24)
+        label.text = "Resultado não encontrado..."
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
    
     lazy var tableViewSearchBooks: UITableView = {
         let table = UITableView()
@@ -43,15 +53,34 @@ class SearchBookView: UIView {
     
     // MARK: - Functions
     
-    func setup() {
+    private func setup() {
         addSubview(tableViewSearchBooks)
+        addSubview(titleError)
         
         NSLayoutConstraint.activate([
             tableViewSearchBooks.topAnchor.constraint(equalTo: topAnchor),
             tableViewSearchBooks.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             tableViewSearchBooks.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            tableViewSearchBooks.bottomAnchor.constraint(equalTo: bottomAnchor)
+            tableViewSearchBooks.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            titleError.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleError.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
+    }
+    
+    func hideTableOrMessage(count: Int) {
+        if count == 0 {
+            tableViewSearchBooks.isHidden = true
+            titleError.isHidden = false
+        } else {
+            tableViewSearchBooks.isHidden = false
+            titleError.isHidden = true
+        }
+    }
+    
+    func hideTitleOrHideTableViewBookSearch(title: Bool, tableView: Bool) {
+        titleError.isHidden = title
+        tableViewSearchBooks.isHidden = tableView
     }
 }
 
@@ -59,18 +88,25 @@ class SearchBookView: UIView {
 
 extension SearchBookView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listFilter.count
+        return decideToListBooks ? listFilter.count : listBooks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cell, for: indexPath) as! SearchBookCell
-        cell.setupData(setup: listFilter[indexPath.row])
+        if decideToListBooks {
+            cell.setupData(setup: listFilter[indexPath.row])
+        } else {
+            cell.setupData(setup: listBooks[indexPath.row])
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.selectBooks(list: listFilter[indexPath.row])
+        if decideToListBooks {
+            delegate?.selectBooks(list: listFilter[indexPath.row])
+        } else {
+            delegate?.selectBooks(list: listBooks[indexPath.row])
+        }
     }
 }
-
-

@@ -17,6 +17,10 @@ class SearchBookViewController: UIViewController {
     private var filterBooks = [Books]()
     private var filterResults = [Books]()
     
+    private var inSearchMode: Bool {
+        return searchController.isActive && !searchController.searchBar.text!.isEmpty
+    }
+    
     override func loadView() {
         view = searchBookView
     }
@@ -44,6 +48,16 @@ class SearchBookViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
     }
+    
+    // MARK: - Functions
+    
+    private func configurarSearchBar() {
+        navigationItem.searchController = self.searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        self.searchController.obscuresBackgroundDuringPresentation = false
+        self.searchController.searchBar.placeholder = "Pesquisar livros"
+        self.searchController.searchBar.delegate = self
+    }
 }
 
 // MARK: - SearchBookViewModelOutput
@@ -55,23 +69,27 @@ extension SearchBookViewController: SearchBookViewModelOutput {
     
     func onListBookLoaded(list: [Books]) {
         filterBooks = list
+        searchBookView.listBooks = list
+        searchBookView.hideTitleOrHideTableViewBookSearch(title: true, tableView: false)
+        searchBookView.tableViewSearchBooks.reloadData()
     }
 }
 
 // MARK: - UISearchBarDelegate
 
 extension SearchBookViewController: UISearchBarDelegate {
-    func configurarSearchBar() {
-        navigationItem.searchController = self.searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        self.searchController.obscuresBackgroundDuringPresentation = false
-        self.searchController.searchBar.placeholder = "Pesquisar livros"
-        self.searchController.searchBar.delegate = self
-    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterResults = filterBooks.filter({$0.title.contains(searchText)})
+        searchBookView.hideTableOrMessage(count: filterResults.count)
         searchBookView.listFilter = filterResults
+        searchBookView.decideToListBooks = true
+        searchBookView.tableViewSearchBooks.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBookView.decideToListBooks = !searchBar.showsCancelButton
+        searchBookView.hideTitleOrHideTableViewBookSearch(title: true, tableView: false)
         searchBookView.tableViewSearchBooks.reloadData()
     }
 }

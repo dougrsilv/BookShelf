@@ -72,6 +72,8 @@ extension ListBookView: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: - ListBookTableCellDelegate
+
 extension ListBookView: ListBookTableCellDelegate {
     func clickOpenIdBook(mode: Books) {
         delegate?.openScreenDetailBook(mode: mode)

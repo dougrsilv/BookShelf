@@ -94,6 +94,8 @@ extension SearchBookViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - SearchBookViewDelegate
+
 extension SearchBookViewController: SearchBookViewDelegate {
     func selectBooks(list: Books) {
         let commentsService = CommentsService()

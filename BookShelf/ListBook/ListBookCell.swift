@@ -60,6 +60,7 @@ class ListBookCell: UICollectionViewCell {
     func setupData(setup: Books?) {
         guard let setup = setup else { return }
         titleListBook.text = setup.title
+        titleListBook.backgroundColor = setup.isHighlight ? .red : .white
         
         let urlRequest = URLRequest(url: URL(string: setup.photo)!)
         

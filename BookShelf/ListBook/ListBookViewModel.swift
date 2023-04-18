@@ -5,7 +5,7 @@
 //  Created by Douglas  Rodrigues  on 20/03/23.
 //
 
-import Foundation
+import UIKit
 
 protocol ListBookViewModelInput {
     func fetchListBooks()
@@ -20,10 +20,25 @@ class ListBookViewModel: ListBookViewModelInput {
     
     private let service: BooksServiceProtocol
     private var dictionary: [String: [Books]] = [:]
+    private var listArrayTitle = [String]()
     weak var delegate: ListBookViewModelOutput?
     
     init(service: BooksServiceProtocol) {
         self.service = service
+    }
+    
+    func removeDuplicates(array: [String]) -> [String] {
+        var encountered = Set<String>()
+        var result: [String] = []
+        for value in array {
+            if encountered.contains(value) {
+            }
+            else {
+                encountered.insert(value)
+                result.append(value)
+            }
+        }
+        return result
     }
     
     func fetchListBooks() {
@@ -34,10 +49,15 @@ class ListBookViewModel: ListBookViewModelInput {
                 case let .failure(erro):
                     self.delegate?.onFailure(name: erro)
                 case let .success(success):
-                    let terror = success.filter({ $0.category == "Terror" })
-                    let comedia = success.filter({ $0.category == "Comédia" })
-                    self.dictionary["Terror"] = terror
-                    self.dictionary["Comédia"] = comedia
+                    
+                    for list in success {
+                        self.listArrayTitle.append(list.category)
+                    }
+                    
+                    for newList in self.removeDuplicates(array: self.listArrayTitle) {
+                        let info = success.filter({ $0.category == newList })
+                        self.dictionary[newList] = info
+                    }
                     self.delegate?.onListBookLoaded(dic: self.dictionary)
                 }
             }

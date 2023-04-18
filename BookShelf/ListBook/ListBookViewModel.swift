@@ -27,7 +27,7 @@ class ListBookViewModel: ListBookViewModelInput {
         self.service = service
     }
     
-    func removeDuplicates(array: [String]) -> [String] {
+    private func removeDuplicates(array: [String]) -> [String] {
         var encountered = Set<String>()
         var result: [String] = []
         for value in array {

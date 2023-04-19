@@ -32,7 +32,7 @@ class SearchBookViewModel: SearchBookViewModelInput {
                 guard let self = self else { return }
                 switch service {
                 case let .failure(erro):
-                    print(erro)
+                    self.delegate?.onFailure(name: erro)
                 case let .success(success):
                     self.books.append(contentsOf: success)
                     self.delegate?.onListBookLoaded(list: self.books)

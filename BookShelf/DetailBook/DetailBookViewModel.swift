@@ -7,15 +7,22 @@
 
 import Foundation
 
-protocol DetailBookViewModelProtocol {
-    func searchService(bookId: Int, completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ())
+protocol DetailBookViewModelInput {
+    func fetchListComments()
+    func fetchListDetailBook()
 }
 
-class DetailBookViewModel: DetailBookViewModelProtocol {
+protocol DetailBookViewModelOutput: AnyObject {
+    func onListComments(list: [CommentsModel])
+    func onListDetailBook(list: DetailBookModel?)
+    func onListDetailBookError(error: CommentsServiceError)
+}
+
+class DetailBookViewModel: DetailBookViewModelInput {
    
     private var datailBook: DetailBookModel? = nil
     private var service: CommentsServiceProtocol? = nil
-    private var listComments = [CommentsModel]()
+    weak var delegate: DetailBookViewModelOutput?
     
     init(model: Books, service: CommentsServiceProtocol) {
         
@@ -31,25 +38,24 @@ class DetailBookViewModel: DetailBookViewModelProtocol {
         self.service = service
     }
     
-    func setupData() -> DetailBookModel? {
-        return datailBook
-    }
-    
-    func captureIdBookAndConverterInt() -> Int {
+    private func captureIdBookAndConverterInt() -> Int {
         guard let converver = Int(datailBook?.id ?? "") else { return 0 }
         return converver
     }
     
-    func searchService(bookId: Int, completion: @escaping (Result<[CommentsModel], CommentsServiceError>) -> ()) {
-        service?.searchService(bookId: bookId, completion: { [weak self] service in
+    func fetchListDetailBook() {
+        delegate?.onListDetailBook(list: datailBook)
+    }
+    
+    func fetchListComments() {
+        service?.searchService(bookId: captureIdBookAndConverterInt(), completion: { [weak self] service in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch service {
                 case let .failure(erro):
-                    completion(.failure(erro))
+                    self.delegate?.onListDetailBookError(error: erro)
                 case let .success(success):
-                    self.listComments.append(contentsOf: success)
-                    completion(.success(self.listComments))
+                    self.delegate?.onListComments(list: success)
                 }
             }
         })

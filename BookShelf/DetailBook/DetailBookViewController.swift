@@ -34,17 +34,43 @@ class DetailBookViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .never
         self.navigationController?.navigationBar.prefersLargeTitles = false
         
-        detailBookView.selectBooks = viewModel.setupData()
-        
-        viewModel.searchService(bookId: viewModel.captureIdBookAndConverterInt()) { [weak self] service in
-            guard let self = self else { return }
-            switch service {
-            case let .success(sucess):
-                self.detailBookView.listCommentsBooks = sucess
-                self.detailBookView.tableViewDetailBooks.reloadData()
-            case let .failure(erro):
-                print(erro)
-            }
-        }
+        viewModel.delegate = self
+        viewModel.fetchListComments()
+        viewModel.fetchListDetailBook()
     }
 }
+
+// MARK: - DetailBookViewModelOutput
+
+extension DetailBookViewController: DetailBookViewModelOutput {
+    func onListDetailBookError(error: CommentsServiceError) {
+        let errorViewController = ErrorViewController()
+        errorViewController.delegate = self
+        
+        let navBarOnModal: UINavigationController = UINavigationController(rootViewController: errorViewController)
+        navBarOnModal.modalPresentationStyle = .overFullScreen
+        navigationController?.present(navBarOnModal, animated: false)
+    }
+    
+    func onListDetailBook(list: DetailBookModel?) {
+        detailBookView.selectBooks = list
+    }
+    
+    func onListComments(list: [CommentsModel]) {
+        detailBookView.listCommentsBooks = list
+        detailBookView.tableViewDetailBooks.reloadData()
+    }
+}
+
+// MARK: - ErrorViewControllerDelegate
+
+extension DetailBookViewController: ErrorViewControllerDelegate {
+    func loadingSerivceErrorViewController(bool: Bool) {
+        super.viewWillAppear(bool)
+        self.tabBarController?.tabBar.isHidden = false
+        viewModel.delegate = self
+        viewModel.fetchListComments()
+        viewModel.fetchListDetailBook()
+    }
+}
+

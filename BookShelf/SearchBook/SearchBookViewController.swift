@@ -64,7 +64,12 @@ class SearchBookViewController: UIViewController {
 
 extension SearchBookViewController: SearchBookViewModelOutput {
     func onFailure(name: BooksServiceError) {
-        print(name)
+        let errorViewController = ErrorViewController()
+        errorViewController.delegate = self
+        
+        let navBarOnModal: UINavigationController = UINavigationController(rootViewController: errorViewController)
+        navBarOnModal.modalPresentationStyle = .overFullScreen
+        navigationController?.present(navBarOnModal, animated: false)
     }
     
     func onListBookLoaded(list: [Books]) {
@@ -104,5 +109,19 @@ extension SearchBookViewController: SearchBookViewDelegate {
         self.navigationController?.pushViewController(detailBookViewController, animated: true)
     }
 }
+
+// MARK: - ErrorViewControllerDelegate
+
+extension SearchBookViewController: ErrorViewControllerDelegate {
+    func loadingSerivceErrorViewController(bool: Bool) {
+        super.viewWillAppear(bool)
+        self.tabBarController?.tabBar.isHidden = false
+        configurarSearchBar()
+        viewModel.delegate = self
+        viewModel.fetchListBooks()
+        searchBookView.delegate = self
+    }
+}
+
 
 

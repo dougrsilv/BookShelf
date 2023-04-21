@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA187E2B29F329DF00471B47 /* ListBookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA187E2A29F329DF00471B47 /* ListBookCoordinator.swift */; };
 		DAA95C5029E82EA500F8BBAA /* SkeletonLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA95C4F29E82EA500F8BBAA /* SkeletonLoadable.swift */; };
 		DAA95C5229E8376F00F8BBAA /* ListBookCellShimmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA95C5129E8376F00F8BBAA /* ListBookCellShimmer.swift */; };
 		DAAEFFB929E0880700A8553F /* DetailBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAAEFFB829E0880700A8553F /* DetailBookViewController.swift */; };
@@ -63,6 +64,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA187E2A29F329DF00471B47 /* ListBookCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBookCoordinator.swift; sourceTree = "<group>"; };
 		DAA95C4F29E82EA500F8BBAA /* SkeletonLoadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkeletonLoadable.swift; sourceTree = "<group>"; };
 		DAA95C5129E8376F00F8BBAA /* ListBookCellShimmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListBookCellShimmer.swift; sourceTree = "<group>"; };
 		DAAEFFB829E0880700A8553F /* DetailBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBookViewController.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				DABD156629C8DEFB00DF80F0 /* ListBookTableCell.swift */,
 				DAC2E73429C91B7B00705BA6 /* ListBookViewModel.swift */,
 				DAA95C5129E8376F00F8BBAA /* ListBookCellShimmer.swift */,
+				DA187E2A29F329DF00471B47 /* ListBookCoordinator.swift */,
 			);
 			path = ListBook;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				DAC597FC29E4CBE600A9F5DF /* CommentsModel.swift in Sources */,
 				DACB1EBE29EC3C050038E262 /* SearchBookView.swift in Sources */,
 				DAFE460E29C89DAF0077D036 /* ListBookView.swift in Sources */,
+				DA187E2B29F329DF00471B47 /* ListBookCoordinator.swift in Sources */,
 				DAFE460A29C893540077D036 /* ListBookViewController.swift in Sources */,
 				DAFE460C29C894DF0077D036 /* MainTabController.swift in Sources */,
 				DAC266D829E5E52A00C77C41 /* ErrorViewController.swift in Sources */,

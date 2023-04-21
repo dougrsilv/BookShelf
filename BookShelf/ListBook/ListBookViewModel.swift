@@ -21,10 +21,25 @@ class ListBookViewModel: ListBookViewModelInput {
     private let service: BooksServiceProtocol
     private var dictionary: [String: [Books]] = [:]
     private var listArrayTitle = [String]()
+    private let coordinator = ListBookCoordinator()
     weak var delegate: ListBookViewModelOutput?
     
     init(service: BooksServiceProtocol) {
         self.service = service
+    }
+    
+    func setupCoordinator() {
+        if let controller = delegate as? ListBookViewController {
+            coordinator.controller = controller
+        }
+    }
+    
+    func openDetailBookViewController(mode: Books) {
+        coordinator.pushDetailBookViewControntrollerScreen(mode: mode)
+    }
+    
+    func openErrorViewController() {
+        coordinator.pushErrorViewControllerScreen()
     }
     
     private func removeDuplicates(array: [String]) -> [String] {

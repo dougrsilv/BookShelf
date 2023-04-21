@@ -34,6 +34,7 @@ class ListBookViewController: UIViewController {
         viewModel.delegate = self
         viewModel.fetchListBooks()
         listBookView.delegate = self
+        viewModel.setupCoordinator()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,12 +59,7 @@ extension ListBookViewController: ListBookViewModelOutput {
     }
     
     func onFailure(name: BooksServiceError) {
-        let errorViewController = ErrorViewController()
-        errorViewController.delegate = self
-        
-        let navBarOnModal: UINavigationController = UINavigationController(rootViewController: errorViewController)
-        navBarOnModal.modalPresentationStyle = .overFullScreen
-        navigationController?.present(navBarOnModal, animated: false)
+        viewModel.openErrorViewController()
     }
 }
 
@@ -71,10 +67,7 @@ extension ListBookViewController: ListBookViewModelOutput {
 
 extension ListBookViewController: ListBookViewDelegate {
     func openScreenDetailBook(mode: Books) {
-        let commentsService = CommentsService()
-        let detailModel = DetailBookViewModel(model: mode, service: commentsService)
-        let detailBookViewController = DetailBookViewController(viewModel: detailModel)
-        self.navigationController?.pushViewController(detailBookViewController, animated: true)
+        viewModel.openDetailBookViewController(mode: mode)
     }
 }
 

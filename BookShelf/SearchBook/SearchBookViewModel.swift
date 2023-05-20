@@ -12,22 +12,22 @@ protocol SearchBookViewModelInput {
 }
 
 protocol SearchBookViewModelOutput: AnyObject {
-    func onFailure(name: BooksServiceError)
+    func onFailure(name: serviceManagerError)
     func onListBookLoaded(list: [Books])
 }
 
 class SearchBookViewModel: SearchBookViewModelInput {
    
-    private let service: BooksServiceProtocol
+    private let service: serviceManager
     private var books: [Books] = []
     weak var delegate: SearchBookViewModelOutput?
     
-    init(service: BooksServiceProtocol) {
+    init(service: serviceManager) {
         self.service = service
     }
     
     func fetchListBooks() {
-        service.searchService { [weak self] service in
+        service.get(path: "", type: [Books].self) { [weak self]  service in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch service {

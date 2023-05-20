@@ -12,18 +12,18 @@ protocol ListBookViewModelInput {
 }
 
 protocol ListBookViewModelOutput: AnyObject {
-    func onFailure(name: BooksServiceError)
+    func onFailure(name: serviceManagerError)
     func onListBookLoaded(dic: [String : [Books]])
 }
 
 class ListBookViewModel: ListBookViewModelInput {
     
-    private let service: BooksServiceProtocol
+    private let service: serviceManager
     private var dictionary: [String: [Books]] = [:]
     private var listArrayTitle = [String]()
     weak var delegate: ListBookViewModelOutput?
     
-    init(service: BooksServiceProtocol) {
+    init(service: serviceManager) {
         self.service = service
     }
     
@@ -42,20 +42,19 @@ class ListBookViewModel: ListBookViewModelInput {
     }
     
     func fetchListBooks() {
-        service.searchService { [weak self] service in
+        service.get(path: "", type: [Books].self) { [weak self]  service in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch service {
                 case let .failure(erro):
                     self.delegate?.onFailure(name: erro)
-                case let .success(success):
-                    
-                    for list in success {
+                case let .success(service):
+                    for list in service {
                         self.listArrayTitle.append(list.category)
                     }
                     
                     for newList in self.removeDuplicates(array: self.listArrayTitle) {
-                        let info = success.filter({ $0.category == newList })
+                        let info = service.filter({ $0.category == newList })
                         self.dictionary[newList] = info
                     }
                     self.delegate?.onListBookLoaded(dic: self.dictionary)

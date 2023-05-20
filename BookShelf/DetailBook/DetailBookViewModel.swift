@@ -15,22 +15,22 @@ protocol DetailBookViewModelInput {
 protocol DetailBookViewModelOutput: AnyObject {
     func onListComments(list: [CommentsModel])
     func onListDetailBook(list: DetailBookModel?)
-    func onListDetailBookError(error: CommentsServiceError)
+    func onListDetailBookError(error: serviceManagerError)
 }
 
 class DetailBookViewModel: DetailBookViewModelInput {
    
     private var datailBook: DetailBookModel? = nil
-    private var service: CommentsServiceProtocol? = nil
+    private var service: serviceManager? = nil
     weak var delegate: DetailBookViewModelOutput?
     
-    init(model: Books, service: CommentsServiceProtocol) {
+    init(model: Books, service: serviceManager) {
         
         let model = DetailBookModel(author: model.author,
                                     category: model.category,
                                     id: model.id,
                                     photo: model.photo,
-                                    price: formatNumberToDecimal(value: model.price),
+                                    price:  formatNumberToDecimal(value: model.price),
                                     stock: model.stock,
                                     title: model.title)
         
@@ -48,7 +48,7 @@ class DetailBookViewModel: DetailBookViewModelInput {
     }
     
     func fetchListComments() {
-        service?.searchService(bookId: captureIdBookAndConverterInt(), completion: { [weak self] service in
+        service?.get(path:  "/\(captureIdBookAndConverterInt())/Comments", type: [CommentsModel].self) { [weak self] service in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch service {
@@ -58,7 +58,7 @@ class DetailBookViewModel: DetailBookViewModelInput {
                     self.delegate?.onListComments(list: success)
                 }
             }
-        })
+        }
     }
     
     private func convertValueInttoString(value: Int) -> String {

@@ -63,7 +63,7 @@ class SearchBookViewController: UIViewController {
 // MARK: - SearchBookViewModelOutput
 
 extension SearchBookViewController: SearchBookViewModelOutput {
-    func onFailure(name: BooksServiceError) {
+    func onFailure(name: serviceManagerError) {
         let errorViewController = ErrorViewController()
         errorViewController.delegate = self
         
@@ -103,8 +103,8 @@ extension SearchBookViewController: UISearchBarDelegate {
 
 extension SearchBookViewController: SearchBookViewDelegate {
     func selectBooks(list: Books) {
-        let commentsService = CommentsService()
-        let detailModel = DetailBookViewModel(model: list, service: commentsService)
+        guard let serviceManager = try? serviceManager(base: "https://64382d9bf3a0c40814acc039.mockapi.io/devpoli/books") else { return }
+        let detailModel = DetailBookViewModel(model: list, service: serviceManager)
         let detailBookViewController = DetailBookViewController(viewModel: detailModel)
         self.navigationController?.pushViewController(detailBookViewController, animated: true)
     }

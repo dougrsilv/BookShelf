@@ -43,7 +43,7 @@ class DetailBookViewController: UIViewController {
 // MARK: - DetailBookViewModelOutput
 
 extension DetailBookViewController: DetailBookViewModelOutput {
-    func onListDetailBookError(error: CommentsServiceError) {
+    func onListDetailBookError(error: serviceManagerError) {
         let errorViewController = ErrorViewController()
         errorViewController.delegate = self
         

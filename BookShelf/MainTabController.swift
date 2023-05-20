@@ -13,13 +13,14 @@ class MainTabController: UITabBarController {
         super.viewDidLoad()
         
         let booksService = BooksService()
-        let listBookViewModel = ListBookViewModel(service: booksService)
+        guard let serviceManager = try? serviceManager(base: "https://64382d9bf3a0c40814acc039.mockapi.io/devpoli/books") else { return }
+        let listBookViewModel = ListBookViewModel(service: serviceManager)
         
         let listBook = self.createTabItem(viewController: ListBookViewController(viewModel: listBookViewModel),
                                           title: "Livros",
                                           image: "icone-hoje")
         
-        let searchViewModel = SearchBookViewModel(service: booksService)
+        let searchViewModel = SearchBookViewModel(service: serviceManager)
         let searchBook = self.createTabItem(viewController: SearchBookViewController(viewModel: searchViewModel),
                                             title: "Pesquisar",
                                             image: "icone-busca")

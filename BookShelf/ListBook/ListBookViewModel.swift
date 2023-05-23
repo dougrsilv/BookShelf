@@ -18,12 +18,12 @@ protocol ListBookViewModelOutput: AnyObject {
 
 class ListBookViewModel: ListBookViewModelInput {
     
-    private let service: serviceManager
+    private let service: ServiceManager
     private var dictionary: [String: [Books]] = [:]
     private var listArrayTitle = [String]()
     weak var delegate: ListBookViewModelOutput?
     
-    init(service: serviceManager) {
+    init(service: ServiceManager) {
         self.service = service
     }
     
@@ -43,22 +43,20 @@ class ListBookViewModel: ListBookViewModelInput {
     
     func fetchListBooks() {
         service.get(path: "", type: [Books].self) { [weak self]  service in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                switch service {
-                case let .failure(erro):
-                    self.delegate?.onFailure(name: erro)
-                case let .success(service):
-                    for list in service {
-                        self.listArrayTitle.append(list.category)
-                    }
-                    
-                    for newList in self.removeDuplicates(array: self.listArrayTitle) {
-                        let info = service.filter({ $0.category == newList })
-                        self.dictionary[newList] = info
-                    }
-                    self.delegate?.onListBookLoaded(dic: self.dictionary)
+            guard let self = self else { return }
+            switch service {
+            case let .failure(erro):
+                self.delegate?.onFailure(name: erro)
+            case let .success(service):
+                for list in service {
+                    self.listArrayTitle.append(list.category)
                 }
+                
+                for newList in self.removeDuplicates(array: self.listArrayTitle) {
+                    let info = service.filter({ $0.category == newList })
+                    self.dictionary[newList] = info
+                }
+                self.delegate?.onListBookLoaded(dic: self.dictionary)
             }
         }
     }

@@ -16,7 +16,7 @@ enum serviceManagerError: Error {
     case newtwork(Error?)
 }
 
-class serviceManager {
+class ServiceManager {
     
     private let urlSession: URLSession
     private let baseURL: URL
@@ -37,7 +37,9 @@ class serviceManager {
         request.httpMethod = "GET"
         let task = urlSession.dataTask(with: request) { data, response,  error in
             if let error = error {
-                callback(.failure(.newtwork(error)))
+                DispatchQueue.main.async {
+                    callback(.failure(.newtwork(error)))
+                }
             }
             
             if let data = data {
@@ -47,8 +49,10 @@ class serviceManager {
                         callback(.success(json) )
                     }
                 } catch (let err) {
-                    callback(.failure(.decodedError))
-                    print(err)
+                    DispatchQueue.main.async {
+                        callback(.failure(.decodedError))
+                        print(err)
+                    }
                 }
             }
         }

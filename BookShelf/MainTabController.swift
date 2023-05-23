@@ -12,8 +12,7 @@ class MainTabController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let booksService = BooksService()
-        guard let serviceManager = try? serviceManager(base: "https://64382d9bf3a0c40814acc039.mockapi.io/devpoli/books") else { return }
+        guard let serviceManager = try? ServiceManager(base: "https://64382d9bf3a0c40814acc039.mockapi.io/devpoli/books") else { return }
         let listBookViewModel = ListBookViewModel(service: serviceManager)
         
         let listBook = self.createTabItem(viewController: ListBookViewController(viewModel: listBookViewModel),

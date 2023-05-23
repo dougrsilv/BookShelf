@@ -21,10 +21,10 @@ protocol DetailBookViewModelOutput: AnyObject {
 class DetailBookViewModel: DetailBookViewModelInput {
    
     private var datailBook: DetailBookModel? = nil
-    private var service: serviceManager? = nil
+    private var service: ServiceManager? = nil
     weak var delegate: DetailBookViewModelOutput?
     
-    init(model: Books, service: serviceManager) {
+    init(model: Books, service: ServiceManager) {
         
         let model = DetailBookModel(author: model.author,
                                     category: model.category,
@@ -49,14 +49,12 @@ class DetailBookViewModel: DetailBookViewModelInput {
     
     func fetchListComments() {
         service?.get(path:  "/\(captureIdBookAndConverterInt())/Comments", type: [CommentsModel].self) { [weak self] service in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                switch service {
-                case let .failure(erro):
-                    self.delegate?.onListDetailBookError(error: erro)
-                case let .success(success):
-                    self.delegate?.onListComments(list: success)
-                }
+            guard let self = self else { return }
+            switch service {
+            case let .failure(erro):
+                self.delegate?.onListDetailBookError(error: erro)
+            case let .success(success):
+                self.delegate?.onListComments(list: success)
             }
         }
     }

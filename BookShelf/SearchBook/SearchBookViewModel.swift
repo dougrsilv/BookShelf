@@ -18,25 +18,23 @@ protocol SearchBookViewModelOutput: AnyObject {
 
 class SearchBookViewModel: SearchBookViewModelInput {
    
-    private let service: serviceManager
+    private let service: ServiceManager
     private var books: [Books] = []
     weak var delegate: SearchBookViewModelOutput?
     
-    init(service: serviceManager) {
+    init(service: ServiceManager) {
         self.service = service
     }
     
     func fetchListBooks() {
         service.get(path: "", type: [Books].self) { [weak self]  service in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                switch service {
-                case let .failure(erro):
-                    self.delegate?.onFailure(name: erro)
-                case let .success(success):
-                    self.books.append(contentsOf: success)
-                    self.delegate?.onListBookLoaded(list: self.books)
-                }
+            guard let self = self else { return }
+            switch service {
+            case let .failure(erro):
+                self.delegate?.onFailure(name: erro)
+            case let .success(success):
+                self.books.append(contentsOf: success)
+                self.delegate?.onListBookLoaded(list: self.books)
             }
         }
     }
